@@ -160,11 +160,11 @@ body {
   background-size: contain; background-repeat: no-repeat; background-position: center;
   filter: grayscale(100%) opacity(0.5); transition: 0.2s; cursor: pointer;
 }
-.btn-water { background-image: url('Jamblr Images/Water-Pin.png'); }
-.btn-fire  { background-image: url('Jamblr Images/Fire-Pin.png'); }
-.btn-earth { background-image: url('Jamblr Images/Earth-Pin.png'); }
-.btn-air   { background-image: url('Jamblr Images/Air-Pin.png'); }
-.btn-aether { background-image: url('Jamblr Images/Aether-Pin.png'); }
+.btn-water { background-image: url('Water-Pin.png'); }
+.btn-fire  { background-image: url('Fire-Pin.png'); }
+.btn-earth { background-image: url('Earth-Pin.png'); }
+.btn-air   { background-image: url('Air-Pin.png'); }
+.btn-aether { background-image: url('Aether-Pin.png'); }
 .deck-btn.active { filter: grayscale(0%) opacity(1) drop-shadow(0 0 10px var(--active-glow)); transform: scale(1.2) translateY(-5px); }
 
 /* AETHER SPECIAL BUTTON */
