@@ -59,7 +59,7 @@ function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 window.selectElement = function(el, btnWrapper) {
   document.querySelectorAll('.element-item').forEach(item => {
     item.classList.remove('active');
-    item.querySelector('.el-option').style.cssText = "background-image: url('Jamblr Images/" + capitalize(el) + "-Pin.png')";
+    item.querySelector('.el-option').style.cssText = "background-image: url('" + capitalize(el) + "-Pin.png')";
     item.querySelector('.el-label').style.cssText = "";
   });
   btnWrapper.classList.add('active');
@@ -68,7 +68,7 @@ window.selectElement = function(el, btnWrapper) {
   const color = getComputedStyle(root).getPropertyValue('--color-' + el).trim();
   
   const opt = btnWrapper.querySelector('.el-option');
-  opt.style.cssText = "background-image: url('Jamblr Images/" + capitalize(el) + "-Pin.png'); filter: grayscale(0%) opacity(1) drop-shadow(0 0 15px " + glow + "); transform: scale(1.2) translateY(-5px);";
+  opt.style.cssText = "background-image: url('" + capitalize(el) + "-Pin.png'); filter: grayscale(0%) opacity(1) drop-shadow(0 0 15px " + glow + "); transform: scale(1.2) translateY(-5px);";
   const lbl = btnWrapper.querySelector('.el-label');
   lbl.style.cssText = `opacity: 1; font-weight: bold; color: ${color};`;
   
@@ -262,7 +262,7 @@ function addPinToMap(jam) {
      const el = document.createElement('div');
      el.className = 'jamblr-pin';
      const capType = capitalize(jam.type);
-     el.style.backgroundImage = "url('Jamblr Images/" + capType + "-Pin.png')";
+     el.style.backgroundImage = "url('" + capType + "-Pin.png')";
      
      let distText = "";
      if (typeof userLocation !== 'undefined' && userLocation) {
@@ -279,7 +279,7 @@ function addPinToMap(jam) {
          });
      }
      
-     const hostImg = jam.avatar || "Jamblr Images/Jamblr-Wordmark.png";
+     const hostImg = jam.avatar || "Jamblr-Wordmark.png";
 
      const popupHTML = `
         <div class="jam-popup-inner type-${jam.type}">
