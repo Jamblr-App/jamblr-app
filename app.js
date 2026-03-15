@@ -385,6 +385,7 @@ window.submitJam = function() {
 JAM_DATA.push(newJam);
 localStorage.setItem('jamblr_jams', JSON.stringify(JAM_DATA));
     addPinToMap(newJam);
+    openJamChat(title, Date.now());
     closeModal();
     showToast("Broadcasting Signal...");
 };
