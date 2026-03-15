@@ -130,15 +130,42 @@
     </div>
 
     <div id="view-chat" class="view-section">
-      <div class="chat-header">TRANSMISSIONS</div>
-      <div class="chat-item" onclick="showToast('Opening Secure Channel...')">
-          <div class="chat-avatar" style="background-image: url('https://i.pravatar.cc/150?img=11');"></div>
-          <div class="chat-info">
-              <div class="chat-name">DrummerDave</div>
-              <div class="chat-preview">Yo, you still looking for a bassist?</div>
-          </div>
-      </div>
+    <div class="chat-header">TRANSMISSIONS</div>
+    
+    <div class="chat-tabs">
+        <div class="chat-tab active" onclick="switchChatTab('signals', this)">SIGNALS</div>
+        <div class="chat-tab" onclick="switchChatTab('dms', this)">DIRECT</div>
     </div>
+
+    <div id="chat-signals" class="chat-panel active">
+        <div id="signals-list">
+            <div style="text-align:center; opacity:0.4; font-size:0.85rem; padding:40px 20px;">
+                No active signals.<br>Join a jam to open a channel.
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-dms" class="chat-panel">
+        <div style="padding:15px;">
+            <input type="text" id="dm-search" class="jamblr-input" placeholder="Enter Sovereign ID to open channel...">
+            <button class="btn-action" onclick="openDMChannel()">OPEN CHANNEL</button>
+        </div>
+        <div id="dm-list"></div>
+    </div>
+
+    <div id="chat-window" class="chat-window hidden">
+        <div class="chat-window-header">
+            <button onclick="closeChatWindow()" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;">←</button>
+            <div id="chat-window-title" style="font-weight:800; font-size:1rem; flex:1; text-align:center;"></div>
+            <button id="btn-burn-chat" onclick="toggleBurnChat()" style="background:none; border:none; color:#888; font-size:0.7rem; cursor:pointer; letter-spacing:1px;">🔥 BURN</button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input-row">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Broadcast...">
+            <button onclick="sendMessage()" class="chat-send-btn">▶</button>
+        </div>
+    </div>
+</div>
 
     <div id="view-profile" class="view-section">
       <div class="profile-container" id="profile-card">
