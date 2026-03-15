@@ -783,3 +783,148 @@ async function generateSovereignSoul() {
         privateSecret: secret
     };
 }
+// --- CHAT ENGINE (Gun.js P2P) ---
+let gun = null;
+let activeChatRoom = null;
+let burnMode = false;
+let openChannels = {};
+
+function initGun() {
+    if (gun) return;
+    gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+}
+
+window.switchChatTab = function(tab, el) {
+    document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.chat-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('chat-' + tab).classList.add('active');
+};
+
+window.openJamChat = function(jamTitle, jamId) {
+    initGun();
+    const roomId = 'jam_' + jamId;
+    activeChatRoom = roomId;
+    burnMode = false;
+    
+    document.getElementById('chat-window-title').innerText = jamTitle;
+    document.getElementById('chat-window').classList.remove('hidden');
+    document.getElementById('chat-messages').innerHTML = '';
+    
+    // Listen for messages
+    gun.get('jamblr_chat').get(roomId).map().on((msg, id) => {
+        if (!msg || !msg.text) return;
+        if (burnMode) return;
+        renderMessage(msg, id);
+    });
+    
+    // Add to signals list if not already there
+    if (!openChannels[roomId]) {
+        openChannels[roomId] = jamTitle;
+        const item = document.createElement('div');
+        item.className = 'chat-item';
+        item.innerHTML = `
+            <div class="chat-avatar" style="background: var(--active-color); display:flex; align-items:center; justify-content:center; font-weight:bold; color:#000;">
+                ${jamTitle.charAt(0)}
+            </div>
+            <div class="chat-info">
+                <div class="chat-name">${jamTitle}</div>
+                <div class="chat-preview">Tap to open channel</div>
+            </div>
+        `;
+        item.onclick = () => openJamChat(jamTitle, jamId);
+        document.getElementById('signals-list').innerHTML = '';
+        document.getElementById('signals-list').appendChild(item);
+    }
+};
+
+window.openDMChannel = function() {
+    const targetId = document.getElementById('dm-search').value.trim();
+    if (!targetId) return;
+    initGun();
+    
+    const myId = userData.soulID || localStorage.getItem('jamblr_soul_id');
+    const roomId = [myId, targetId].sort().join('_');
+    activeChatRoom = roomId;
+    burnMode = false;
+    
+    document.getElementById('chat-window-title').innerText = targetId.substring(0, 16) + '...';
+    document.getElementById('chat-window').classList.remove('hidden');
+    document.getElementById('chat-messages').innerHTML = '';
+    
+    gun.get('jamblr_chat').get(roomId).map().on((msg, id) => {
+        if (!msg || !msg.text) return;
+        renderMessage(msg, id);
+    });
+
+    // Add to DM list
+    const item = document.createElement('div');
+    item.className = 'chat-item';
+    item.innerHTML = `
+        <div class="chat-avatar" style="background:#333; display:flex; align-items:center; justify-content:center; font-size:0.6rem; color:#aaa;">ID</div>
+        <div class="chat-info">
+            <div class="chat-name">${targetId.substring(0, 20)}...</div>
+            <div class="chat-preview">Secure channel open</div>
+        </div>
+    `;
+    item.onclick = () => {
+        activeChatRoom = roomId;
+        document.getElementById('chat-window').classList.remove('hidden');
+    };
+    document.getElementById('dm-list').prepend(item);
+    document.getElementById('dm-search').value = '';
+};
+
+function renderMessage(msg, id) {
+    const myId = userData.soulID || localStorage.getItem('jamblr_soul_id');
+    const isMine = msg.sender === myId;
+    
+    // Avoid duplicates
+    if (document.getElementById('msg-' + id)) return;
+    
+    const bubble = document.createElement('div');
+    bubble.id = 'msg-' + id;
+    bubble.className = 'chat-bubble ' + (isMine ? 'mine' : 'theirs');
+    bubble.innerHTML = `
+        ${!isMine ? `<div class="bubble-name">${msg.name || 'Unknown'}</div>` : ''}
+        ${msg.text}
+    `;
+    document.getElementById('chat-messages').appendChild(bubble);
+    document.getElementById('chat-messages').scrollTop = 99999;
+}
+
+window.sendMessage = function() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || !activeChatRoom || !gun) return;
+    
+    const myId = userData.soulID || localStorage.getItem('jamblr_soul_id');
+    const msg = {
+        text: text,
+        sender: myId,
+        name: userData.name || 'Unknown',
+        time: Date.now()
+    };
+    
+    gun.get('jamblr_chat').get(activeChatRoom).set(msg);
+    input.value = '';
+};
+
+window.closeChatWindow = function() {
+    document.getElementById('chat-window').classList.add('hidden');
+    activeChatRoom = null;
+};
+
+window.toggleBurnChat = function() {
+    burnMode = !burnMode;
+    const btn = document.getElementById('btn-burn-chat');
+    if (burnMode) {
+        document.getElementById('chat-messages').innerHTML = 
+            "<div style='text-align:center; opacity:0.4; padding:40px; font-size:0.85rem;'>🔥 Burn mode active.<br>Messages not stored.</div>";
+        btn.style.color = 'var(--color-fire)';
+        showToast("🔥 Burn Mode: Messages won't be saved");
+    } else {
+        btn.style.color = '#888';
+        showToast("History mode restored");
+    }
+};
