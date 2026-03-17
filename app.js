@@ -692,19 +692,14 @@ window.checkLegalState = function() {
     const c1 = document.getElementById('legal-check-1').checked;
     const c2 = document.getElementById('legal-check-2').checked;
     const btn = document.getElementById('btn-legal-enter');
-
     if(c1 && c2) {
+        btn.removeAttribute('disabled');
         btn.classList.remove('disabled');
-        btn.disabled = false;
-        btn.style.opacity = "1";
-        btn.style.filter = "none";
-        btn.style.boxShadow = "0 0 15px var(--active-glow)";
+        btn.style.cssText = "opacity:1; filter:none; box-shadow: 0 0 15px var(--active-glow); background: var(--active-color); color: #020617;";
     } else {
+        btn.setAttribute('disabled', true);
         btn.classList.add('disabled');
-        btn.disabled = true;
-        btn.style.opacity = "0.5";
-        btn.style.filter = "grayscale(100%)";
-        btn.style.boxShadow = "none";
+        btn.style.cssText = "opacity:0.5; filter:grayscale(100%);";
     }
 };
 
