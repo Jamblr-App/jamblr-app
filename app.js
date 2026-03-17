@@ -795,7 +795,7 @@ let openChannels = {};
 
 function initGun() {
     if (gun) return;
-    gun = Gun(['https://gun-manhattan.herokuapp.com/gun']);
+    gun = Gun(['https://gun-us.herokuapp.com/gun']);
 }
 
 window.switchChatTab = function(tab, el) {
