@@ -901,24 +901,6 @@ window.openDMChannel = function() {
     });
 };
 
-    // Add to DM list
-    const item = document.createElement('div');
-    item.className = 'chat-item';
-    item.innerHTML = `
-        <div class="chat-avatar" style="background:#333; display:flex; align-items:center; justify-content:center; font-size:0.6rem; color:#aaa;">ID</div>
-        <div class="chat-info">
-            <div class="chat-name">${targetId.substring(0, 20)}...</div>
-            <div class="chat-preview">Secure channel open</div>
-        </div>
-    `;
-    item.onclick = () => {
-        activeChatRoom = roomId;
-        document.getElementById('chat-window').classList.remove('hidden');
-    };
-    document.getElementById('dm-list').prepend(item);
-    document.getElementById('dm-search').value = '';
-};
-
 function renderMessage(msg, id) {
     const myId = userData.soulID || localStorage.getItem('jamblr_soul_id');
     const isMine = msg.sender === myId;
