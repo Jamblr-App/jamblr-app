@@ -20,7 +20,7 @@
             <p><strong>1. PROTOCOL NOT PLATFORM.</strong> Jamblr is a decentralized utility. The Creators do not moderate content or guarantee safety.</p>
             <p><strong>2. PHYSICAL DANGER.</strong> You acknowledge that meeting strangers carries risk of bodily injury, theft, or death. You assume all liability.</p>
             <p><strong>3. NO RECOVERY.</strong> Your Identity is a cryptographic key on this device. If you lose it, it is gone forever.</p>
-            <p><strong>4. WESTERN NY COMPLIANCE.</strong> You acknowledge that Erie/Niagara Counties enforce strict codes regarding Noise, Permits, and Curfews.</p>
+            <p><strong>4. LOCAL ORDINANCE COMPLIANCE.</strong> You acknowledge that your city and or country may enforce strict codes regarding Noise, Permits, and Curfews.</p>
             <hr style="border: 0; border-top: 1px solid #333; margin: 15px 0;">
             <p style="color: var(--color-fire); font-weight: bold;">5. AGE RESTRICTION</p>
             <p><strong>This Protocol is STRICTLY for users 18 years of age or older.</strong> By accessing this software, you affirm that you are of legal age.</p>
@@ -28,11 +28,11 @@
 
         <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
             <label class="legal-checkbox-row">
-                <input type="checkbox" id="legal-check-1" onchange="checkLegalState()">
+                <input type="checkbox" id="legal-check-1" onchange="checkLegalState();" onclick="checkLegalState();">
                 <span>I accept the risks of physical injury or death.</span>
             </label>
             <label class="legal-checkbox-row">
-                <input type="checkbox" id="legal-check-2" onchange="checkLegalState()">
+                <input type="checkbox" id="legal-check-2" onchange="checkLegalState();" onclick="checkLegalState();">
                 <span style="color: var(--color-water);">I CERTIFY under penalty of perjury that I am 18+ years old.</span>
             </label>
         </div>
