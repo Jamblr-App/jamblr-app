@@ -312,10 +312,9 @@ function addPinToMap(jam) {
 
             <div style="display:flex; gap:10px; margin-top:10px;">
                 <button class="btn-join" onclick="showToast('Request Sent to ${jam.host}...')">JOIN SIGNAL</button>
-                <a href="${navLink}" target="_blank" class="btn-join" style="width:50px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.2);">
-                    🚀
-                </a>
+                <a href="${navLink}" target="_blank" class="btn-join" style="width:50px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.2);">🚀</a>
             </div>
+            ${jam.host === userData.name ? `<button class="btn-join" style="background:#ef4444; margin-top:5px; width:100%;" onclick="removeJam(${jam.lat}, ${jam.lng})">🗑 REMOVE SIGNAL</button>` : ''}
         </div>
      `;
      
@@ -396,6 +395,19 @@ localStorage.setItem('jamblr_jams', JSON.stringify(JAM_DATA));
     openJamChat(title, Date.now());
     closeModal();
     showToast("Broadcasting Signal...");
+};
+window.removeJam = function(lat, lng) {
+    if (!confirm("Remove this signal from the map?")) return;
+    const saved = localStorage.getItem('jamblr_jams');
+    if (!saved) return;
+    const jams = JSON.parse(saved);
+    const updated = jams.filter(j => !(j.lat === lat && j.lng === lng));
+    localStorage.setItem('jamblr_jams', JSON.stringify(updated));
+    allMarkers.forEach(m => {
+        if (m.getLngLat().lat === lat && m.getLngLat().lng === lng) m.remove();
+    });
+    allMarkers = allMarkers.filter(m => !(m.getLngLat().lat === lat && m.getLngLat().lng === lng));
+    showToast("Signal removed.");
 };
 
 window.showToast = function(msg) {
