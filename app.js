@@ -314,7 +314,7 @@ function addPinToMap(jam) {
                 <button class="btn-join" onclick="showToast('Request Sent to ${jam.host}...')">JOIN SIGNAL</button>
                 <a href="${navLink}" target="_blank" class="btn-join" style="width:50px; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.2);">🚀</a>
             </div>
-            ${jam.host === userData.name ? `<button class="btn-join" style="background:#ef4444; margin-top:5px; width:100%;" onclick="removeJam(${jam.lat}, ${jam.lng})">🗑 REMOVE SIGNAL</button>` : ''}
+            ${jam.host && jam.host === (userData.name || '') ? `<button class="btn-join" style="background:#ef4444; margin-top:5px; width:100%;" onclick="removeJam(${jam.lat}, ${jam.lng})">🗑 REMOVE SIGNAL</button>` : ''}
         </div>
      `;
      
