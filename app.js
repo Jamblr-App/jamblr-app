@@ -173,6 +173,7 @@ window.enterApp = function() {
   initMap();
   renderCalendar();
   loadProfileData();
+  setTimeout(checkExpiredJams, 3000);   
   setTimeout(() => {
       initGun();
       const myName = userData.name || '';
@@ -386,7 +387,8 @@ window.submitJam = function() {
         genre: genre,
         needs: needs,
         host: userData.name || "Me",
-        avatar: userData.avatar
+        avatar: userData.avatar,
+        createdAt: Date.now()
     };
 
 JAM_DATA.push(newJam);
@@ -396,6 +398,22 @@ localStorage.setItem('jamblr_jams', JSON.stringify(JAM_DATA));
     closeModal();
     showToast("Broadcasting Signal...");
 };
+function checkExpiredJams() {
+    const saved = localStorage.getItem('jamblr_jams');
+    if (!saved) return;
+    const jams = JSON.parse(saved);
+    const now = Date.now();
+    const limit = 24 * 60 * 60 * 1000;
+    const active = jams.filter(jam => !jam.createdAt || (now - jam.createdAt) < limit);
+    const expired = jams.length - active.length;
+    if (expired > 0) {
+        localStorage.setItem('jamblr_jams', JSON.stringify(active));
+        showToast(`${expired} signal${expired > 1 ? 's' : ''} expired and removed.`);
+        allMarkers.forEach(m => m.remove());
+        allMarkers = [];
+        active.forEach(jam => addPinToMap(jam));
+    }
+}
 window.removeJam = function(lat, lng) {
     if (!confirm("Remove this signal from the map?")) return;
     const saved = localStorage.getItem('jamblr_jams');
